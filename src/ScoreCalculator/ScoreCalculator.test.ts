@@ -26,29 +26,7 @@ it("Calculates the score of a strike, spare, 4|0 to be 38", () => {
 });
 
 it("Calculates the score when you get a spare in the last frame", () => {
-  const rolls = [
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    9,
-    5
-  ];
+  const rolls = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 5];
   expect(calculate(rolls)).toEqual(33);
 });
 
