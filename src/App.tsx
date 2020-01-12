@@ -3,15 +3,15 @@ import './App.css';
 import Frame from './components/Frame';
 import TotalScore from './components/TotalScore'
 import ScoreCard from "./components/ScoreCard";
+import { checkIfFinished } from './util';
 
 const App: React.FC = () => {
-  const [currentFrame, setCurrentFrame] = useState<number>(1);
-  const [rolls, setRolls] = useState<number[]>([]);
-  const handleFrameIncrease = () => setCurrentFrame(currentFrame + 1);
-  const handleRoll = (roll: number) => setRolls(rolls.concat([roll]));
+  const [frames, setFrames] = useState<number[][]>([]);
+  const isGameFinished = checkIfFinished(frames);
+
+  const handleFrameFinished = (rolls: number[]) => setFrames([...frames, rolls]);
   const resetGame = () => {
-    setCurrentFrame(1);
-    setRolls([]);
+    setFrames([]);
   }
 
   return (
@@ -19,10 +19,10 @@ const App: React.FC = () => {
       <h1>
         Kingpin
       </h1>
-      <ScoreCard rolls={rolls} currentFrame={currentFrame} />
-      {currentFrame <= 10 ? <Frame onFrameIncrease={handleFrameIncrease} onRoll={handleRoll} currentFrame={currentFrame} /> : null}
+      <ScoreCard frames={frames} />
+      {!isGameFinished && <Frame currentFrame={frames.length + 1} onFrameFinished={handleFrameFinished} />}
 
-      <TotalScore currentFrame={currentFrame} rolls={rolls} />
+      <TotalScore frames={frames} />
       <button onClick={resetGame}>Reset game</button>
     </div>
   );

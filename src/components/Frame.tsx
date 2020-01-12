@@ -2,34 +2,55 @@ import React, { useState } from "react";
 import "./Frame.css";
 
 interface FrameProps {
-  onFrameIncrease: () => void;
-  onRoll: (roll: number) => void;
   currentFrame: number;
+  onFrameFinished: (rolls: number[]) => void;
 }
 
 const Frame = (props: FrameProps) => {
-  const { onFrameIncrease, onRoll, currentFrame } = props;
+  const { currentFrame, onFrameFinished } = props;
   const [pins, setPins] = useState<number>(10);
-  const [roll, setRoll] = useState<number>(1);
+  const [rolls, setRolls] = useState<number[]>([]);
   const resetFrame = () => {
     setPins(10);
-    setRoll(1);
+    setRolls([]);
   };
+  const isStrike = (numberOfPinsKnockedDown: number) => numberOfPinsKnockedDown === 10 && rolls.length === 0;
   const handleRoll = (numberOfPinsKnockedDown: number) => {
-    if (numberOfPinsKnockedDown === 10 && roll === 1) {
-      resetFrame();
-      onFrameIncrease();
+    if (currentFrame !== 10) {
+      if (isStrike(numberOfPinsKnockedDown)) {
+        onFrameFinished([10]);
+        resetFrame();
+      } else {
+        setPins(pins - numberOfPinsKnockedDown);
+        setRolls(rolls => [...rolls, numberOfPinsKnockedDown]);
+      }
     } else {
-      setPins(pins - numberOfPinsKnockedDown);
-      setRoll(roll + 1);
+      if (isStrike(numberOfPinsKnockedDown)) {
+        setPins(10);
+        setRolls(rolls => [...rolls, numberOfPinsKnockedDown]);
+      } else {
+        const pinsLeft = pins - numberOfPinsKnockedDown;
+        setPins(!pinsLeft ? 10 : pinsLeft);
+        setRolls(rolls => [...rolls, numberOfPinsKnockedDown]);
+      }
     }
-
-    onRoll(numberOfPinsKnockedDown);
   };
 
-  if (roll > 2) {
-    resetFrame();
-    onFrameIncrease();
+  if (currentFrame !== 10) {
+    if (rolls.length === 2) {
+      onFrameFinished(rolls);
+      resetFrame();
+    }
+  } else {
+    if (rolls[0] === 10 || rolls[0] + rolls[1] === 10) {
+      if (rolls.length === 3) {
+        onFrameFinished(rolls);
+        resetFrame();
+      }
+    } else if (rolls.length === 2) {
+      onFrameFinished(rolls);
+      resetFrame();
+    }
   }
 
   const pinsButtons = [];

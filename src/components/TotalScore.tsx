@@ -1,18 +1,18 @@
 import React from 'react'
 import { calculate } from '../ScoreCalculator/ScoreCalculator';
-
+import { checkIfFinished } from '../util';
 
 interface TotalScoreProps {
-  rolls: number[];
-  currentFrame: number;
+  frames: number[][];
 }
 
 const TotalScore = (props: TotalScoreProps) => {
-  const { rolls, currentFrame } = props;
-  const currentScore = calculate(rolls);
+  const { frames } = props;
+  const currentScore = calculate(frames.flat());
+  const isGameFinished = checkIfFinished(frames);
   return (
     <p>
-      {currentFrame <= 10 ? "Current score: " : "Final score: "}
+      {!isGameFinished ? "Current score: " : "Final score: "}
       {currentScore}
     </p>
   )
