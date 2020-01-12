@@ -1,12 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { Roll } from "../types";
 
 interface FrameProps {
   frameNumber: number;
-  rolls: number[];
+  rolls: Roll[];
 }
 
-const Frame = (props: FrameProps) => {
+const FrameRolls = (props: FrameProps) => {
   const { frameNumber, rolls } = props;
   return (
     <>
@@ -20,6 +20,4 @@ const Frame = (props: FrameProps) => {
   );
 };
 
-Frame.propTypes = {};
-
-export default Frame;
+export default FrameRolls;

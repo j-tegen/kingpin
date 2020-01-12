@@ -1,29 +1,30 @@
 import React, { useState } from "react";
 import "./ActiveFrame.css";
-import Frame from "./Frame";
+import FrameRolls from "./FrameRolls";
+import { Roll, Pins } from "../types";
 
 interface ActiveFrameProps {
   currentFrame: number;
-  onFrameFinished: (rolls: number[]) => void;
+  onFrameFinished: (rolls: Roll[]) => void;
 }
 
 const ActiveFrame = (props: ActiveFrameProps) => {
   const { currentFrame, onFrameFinished } = props;
-  const [pins, setPins] = useState<number>(10);
-  const [rolls, setRolls] = useState<number[]>([]);
+  const [pins, setPins] = useState<Pins>(10);
+  const [rolls, setRolls] = useState<Roll[]>([]);
   const resetFrame = () => {
     setPins(10);
     setRolls([]);
   };
-  const isStrike = (numberOfPinsKnockedDown: number) =>
+  const isStrike = (numberOfPinsKnockedDown: Roll) =>
     numberOfPinsKnockedDown === 10 && rolls.length === 0;
-  const handleRoll = (numberOfPinsKnockedDown: number) => {
+  const handleRoll = (numberOfPinsKnockedDown: Roll) => {
     if (currentFrame !== 10) {
       if (isStrike(numberOfPinsKnockedDown)) {
         onFrameFinished([10]);
         resetFrame();
       } else {
-        setPins(pins - numberOfPinsKnockedDown);
+        setPins((pins - numberOfPinsKnockedDown) as Pins);
         setRolls(rolls => [...rolls, numberOfPinsKnockedDown]);
       }
     } else {
@@ -32,7 +33,7 @@ const ActiveFrame = (props: ActiveFrameProps) => {
         setRolls(rolls => [...rolls, numberOfPinsKnockedDown]);
       } else {
         const pinsLeft = pins - numberOfPinsKnockedDown;
-        setPins(!pinsLeft ? 10 : pinsLeft);
+        setPins(!pinsLeft ? 10 : (pinsLeft as Pins));
         setRolls(rolls => [...rolls, numberOfPinsKnockedDown]);
       }
     }
@@ -59,7 +60,11 @@ const ActiveFrame = (props: ActiveFrameProps) => {
 
   for (let i = 0; i <= pins; i++) {
     pinsButtons.push(
-      <button key={i} onClick={() => handleRoll(i)} className={"Pin-button"}>
+      <button
+        key={i}
+        onClick={() => handleRoll(i as Roll)}
+        className={"Pin-button"}
+      >
         {i}
       </button>
     );
@@ -67,7 +72,7 @@ const ActiveFrame = (props: ActiveFrameProps) => {
 
   return (
     <div>
-      <Frame rolls={rolls} frameNumber={currentFrame} />
+      <FrameRolls rolls={rolls} frameNumber={currentFrame} />
       {pinsButtons}
     </div>
   );

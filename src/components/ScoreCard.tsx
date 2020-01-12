@@ -1,9 +1,10 @@
 import React from "react";
 import "./ScoreCard.css";
-import Frame from "./Frame";
+import FrameRolls from "./FrameRolls";
+import { Frame } from "../types";
 
 interface ScoreCardProps {
-  frames: number[][];
+  frames: Frame[];
 }
 
 const ScoreCard = (props: ScoreCardProps) => {
@@ -16,7 +17,7 @@ const ScoreCard = (props: ScoreCardProps) => {
 
     frameComponents.push(
       <div key={i} className="Score-card-frame">
-        <Frame rolls={rollsInFrame} frameNumber={i + 1} />
+        <FrameRolls rolls={rollsInFrame} frameNumber={i + 1} />
       </div>
     );
   }

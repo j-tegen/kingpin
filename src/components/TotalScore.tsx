@@ -1,9 +1,10 @@
-import React from 'react'
-import { calculate } from '../ScoreCalculator/ScoreCalculator';
-import { checkIfFinished } from '../util';
+import React from "react";
+import { calculate } from "../ScoreCalculator/ScoreCalculator";
+import { checkIfFinished } from "../util";
+import { Frame } from "../types";
 
 interface TotalScoreProps {
-  frames: number[][];
+  frames: Frame[];
 }
 
 const TotalScore = (props: TotalScoreProps) => {
@@ -15,7 +16,7 @@ const TotalScore = (props: TotalScoreProps) => {
       {!isGameFinished ? "Current score: " : "Final score: "}
       {currentScore}
     </p>
-  )
-}
+  );
+};
 
-export default TotalScore
+export default TotalScore;
